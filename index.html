@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PNW Knowledge Chatbot | Purdue University Northwest</title>
+  <meta name="description" content="Official grounded knowledge chatbot for Purdue University Northwest students providing verified information on academic regulations, parking citations, EPOS, and campus services.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="logo-badge">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          <h1>PNW Knowledge Chatbot</h1>
+          <p class="subtitle">Purdue University Northwest &bull; Student Assistant</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Campus Selector Dropdown -->
+        <div class="campus-selector-wrapper">
+          <label for="campusSelect"><i class="fa-solid fa-location-dot"></i> Campus Scope:</label>
+          <select id="campusSelect" class="campus-select">
+            <option value="All">All PNW Campuses (Hammond & Westville)</option>
+            <option value="Hammond">PNW Hammond Campus</option>
+            <option value="Westville">PNW Westville Campus</option>
+          </select>
+        </div>
+
+        <!-- Mode Nav Buttons -->
+        <div class="nav-pills">
+          <button class="nav-btn active" id="btnChatView" data-tab="chat">
+            <i class="fa-solid fa-comments"></i> Chat
+          </button>
+          <button class="nav-btn" id="btnCorpusView" data-tab="corpus">
+            <i class="fa-solid fa-book-bookmark"></i> Knowledge Base
+          </button>
+          <button class="nav-btn" id="btnContactsView" data-tab="contacts">
+            <i class="fa-solid fa-address-book"></i> Directory
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="main-content">
+      <!-- CHAT VIEW -->
+      <section id="chatView" class="view-panel active">
+        <!-- Quick Prompts Ribbon -->
+        <div class="quick-prompts-container">
+          <span class="prompts-label"><i class="fa-solid fa-bolt"></i> Instant Inquiries:</span>
+          <div class="prompts-scroll">
+            <button class="prompt-chip" data-query="How do I pay parking citations at Hammond?">
+              <i class="fa-solid fa-car"></i> Pay Parking Citations
+            </button>
+            <button class="prompt-chip" data-query="Where is the Office of the Dean of Students?">
+              <i class="fa-solid fa-building-user"></i> Dean of Students Location
+            </button>
+            <button class="prompt-chip" data-query="How do I submit Computer Science MS EPOS?">
+              <i class="fa-solid fa-laptop-code"></i> Submit CS MS EPOS
+            </button>
+            <button class="prompt-chip" data-query="How do I get my registration PIN?">
+              <i class="fa-solid fa-key"></i> Registration PIN Steps
+            </button>
+            <button class="prompt-chip" data-query="What are the add/drop deadlines?">
+              <i class="fa-solid fa-calendar-check"></i> Add/Drop Deadlines
+            </button>
+            <button class="prompt-chip prompt-chip-failsafe" data-query="How do I apply for West Lafayette housing?">
+              <i class="fa-solid fa-triangle-exclamation"></i> Fail-Safe Demo (WL Query)
+            </button>
+          </div>
+        </div>
+
+        <!-- Message List Container -->
+        <div class="chat-messages-wrapper" id="chatMessages">
+          <!-- Initial Welcome Message Card -->
+          <div class="message-card bot-message welcome-card">
+            <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="message-body">
+              <div class="message-header">
+                <span class="sender-name">PNW Assistant</span>
+                <span class="badge badge-grounded"><i class="fa-solid fa-shield-halved"></i> Constitution Grounded</span>
+                <span class="timestamp">Just now</span>
+              </div>
+              <div class="message-text">
+                <p>Welcome to the official <strong>Purdue University Northwest (PNW) Knowledge Chatbot</strong>.</p>
+                <p>I provide instant, accurate answers for PNW undergraduate and graduate students strictly grounded in official university policies, academic regulations, degree maps, parking rules, and office locations.</p>
+                <div class="welcome-features">
+                  <div class="feature-item"><i class="fa-solid fa-circle-check"></i> 100% Grounded Answers with Official Links</div>
+                  <div class="feature-item"><i class="fa-solid fa-circle-check"></i> Disambiguates Hammond vs. Westville Campuses</div>
+                  <div class="feature-item"><i class="fa-solid fa-circle-check"></i> Fail-Safe Department Routing for Complex Inquiries</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+          <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
+          <div class="dots-wrapper">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="typing-text">Searching PNW Document Corpus...</span>
+          </div>
+        </div>
+
+        <!-- Input Control Panel -->
+        <div class="chat-input-container">
+          <form id="chatForm" class="chat-form">
+            <button type="button" id="voiceToggleBtn" class="action-icon-btn" title="Simulate Voice Query">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+            <input type="text" id="userInput" class="chat-input" placeholder="Ask a question about PNW policies, PINs, parking, EPOS, deadlines..." autocomplete="off" required>
+            <button type="submit" id="sendBtn" class="send-btn">
+              <span>Send</span> <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+          <div class="input-footer">
+            <button id="clearChatBtn" class="clear-btn"><i class="fa-solid fa-trash-can"></i> Clear History</button>
+            <span class="disclaimer"><i class="fa-solid fa-circle-info"></i> All answers strictly grounded in PNW Corpus Version 2026.1</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- KNOWLEDGE CORPUS EXPLORER VIEW -->
+      <section id="corpusView" class="view-panel" style="display: none;">
+        <div class="panel-header">
+          <h2><i class="fa-solid fa-book-open"></i> PNW Document Corpus Explorer</h2>
+          <p>Inspect the official university policies, regulations, and degree guidelines powering the RAG search engine.</p>
+        </div>
+        <div class="corpus-grid" id="corpusListContainer">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- DEPARTMENT DIRECTORY VIEW -->
+      <section id="contactsView" class="view-panel" style="display: none;">
+        <div class="panel-header">
+          <h2><i class="fa-solid fa-address-book"></i> PNW Department Contact Directory</h2>
+          <p>Direct contacts and physical office locations for fail-safe student routing.</p>
+        </div>
+        <div class="contacts-grid" id="contactsListContainer">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Metrics Bar -->
+    <footer class="app-footer">
+      <div class="metric"><i class="fa-solid fa-shield-cat"></i> Grounding Guarantee: <span>100%</span></div>
+      <div class="metric"><i class="fa-solid fa-gauge-high"></i> Search Latency: <span id="latencyMetric">< 1.2s</span></div>
+      <div class="metric"><i class="fa-solid fa-university"></i> Active Scope: <span id="activeScopeLabel">Hammond & Westville</span></div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

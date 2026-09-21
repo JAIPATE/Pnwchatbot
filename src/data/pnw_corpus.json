@@ -1,0 +1,105 @@
+{
+  "corpus_metadata": {
+    "institution": "Purdue University Northwest (PNW)",
+    "version": "2026.1",
+    "last_updated": "2026-09-14",
+    "supported_campuses": ["Hammond", "Westville"]
+  },
+  "documents": [
+    {
+      "id": "DOC-PARK-01",
+      "title": "PNW Traffic & Parking Regulations",
+      "category": "Parking & Campus Safety",
+      "campus": "Both",
+      "url": "https://www.pnw.edu/getting-to-pnw/parking-regulations/",
+      "summary": "Rules for virtual parking permits, citation payment, appeals, and campus lot enforcement for PNW Hammond and Westville.",
+      "content": "Purdue University Northwest (PNW) utilizes virtual permit enforcement tied to vehicle license plates at both the Hammond and Westville campuses. Students must register their vehicle plate through the online PNW Parking Portal before parking in student-designated lots. \n\n### Paying Parking Citations\n- Parking citations issued at PNW Hammond or Westville must be paid or appealed online within 14 calendar days of issuance.\n- **Payment & Appeals Portal**: Visit [PNW Parking Portal](https://www.pnw.edu/getting-to-pnw/parking-regulations/) to log in with your myPNW credentials.\n- Failure to resolve citations will result in a Registrar account hold, preventing registration and transcript requests.\n\n### Campus Disambiguation\nNote: Parking permits and citations for PNW (Hammond & Westville) are completely separate from Purdue University West Lafayette permits and garage rules. West Lafayette parking passes are NOT valid at PNW campuses, and PNW passes do not authorize parking at West Lafayette."
+    },
+    {
+      "id": "DOC-DOS-01",
+      "title": "Office of the Dean of Students Locations & Student Advocacy",
+      "category": "Student Services & Advocacy",
+      "campus": "Both",
+      "url": "https://www.pnw.edu/dean-of-students/",
+      "summary": "Physical locations, office hours, contact numbers, and advocacy services for the PNW Dean of Students.",
+      "content": "The PNW Office of the Dean of Students serves as a central hub for student advocacy, emergency assistance, academic integrity guidance, and code of conduct matters across both campuses.\n\n### Office Locations & Contacts\n- **Hammond Campus Office**: Student Union & Library Building (SUL), Room 313\n  - Phone: (219) 989-2367\n  - Email: dos@pnw.edu\n  - Hours: Monday - Friday, 8:00 AM - 5:00 PM CST\n- **Westville Campus Office**: Library-Student Faculty Building (LSF), Room 103\n  - Phone: (219) 785-5551\n  - Email: dos@pnw.edu\n  - Hours: Monday - Friday, 8:00 AM - 4:30 PM CST\n\nIf you have personal hardship, academic grievances, or need guidance on official grade appeals, contact the Dean of Students office at your primary campus."
+    },
+    {
+      "id": "DOC-CS-EPOS-01",
+      "title": "MS in Computer Science Plan of Study (EPOS) Guide",
+      "category": "Academic Advising & Graduate Programs",
+      "campus": "Both",
+      "url": "https://www.pnw.edu/computer-science/graduate-programs/ms-plan-of-study/",
+      "summary": "Step-by-step instructions for submitting the Electronic Plan of Study (EPOS) in myPNW for Master of Science in Computer Science students.",
+      "content": "Graduate students enrolled in the MS in Computer Science program at PNW must submit an Electronic Plan of Study (EPOS) prior to completing 15 graduate credit hours.\n\n### EPOS Submission Steps\n1. Log in to the **myPNW Portal** ([https://mypnw.pnw.edu](https://mypnw.pnw.edu)).\n2. Navigate to the **Graduate School Plan of Study** tab under Academic Services.\n3. Create a new draft Plan of Study selecting **Computer Science MS** as your degree objective.\n4. Enter your primary Academic Advisor as Advisory Committee Chair.\n5. Select your 30 required graduate course credits (including Core CS courses and approved electives).\n6. Submit the draft for Academic Advisor Review.\n\n### Critical Advisor Approval Requirement\n- Submitting the EPOS in myPNW does NOT make it active automatically. Your academic advisor must review and digitally approve the plan.\n- If course substitutions are needed, you MUST consult your advisor before updating the EPOS. Unauthorized course changes will delay degree audit clearance for graduation."
+    },
+    {
+      "id": "DOC-REG-01",
+      "title": "Academic Regulations: Registration PINs, Add/Drop & Holds",
+      "category": "Academic Regulations",
+      "campus": "Both",
+      "url": "https://www.pnw.edu/registration/academic-regulations/",
+      "summary": "Official rules regarding Registration PIN retrieval, course add/drop deadlines, academic standing, and resolving student account holds.",
+      "content": "PNW Academic Regulations govern enrollment procedures, prerequisite checks, and course schedule modifications.\n\n### Registration PIN Requirement\n- All degree-seeking undergraduate and graduate students require a unique **Registration PIN** for each registration semester.\n- Registration PINs are NOT distributed by the Registrar or automated helpdesks. You MUST schedule an advising appointment with your assigned Academic Advisor to review your schedule; your advisor will release your PIN upon approval.\n\n### Add/Drop Deadlines\n- **First Week of Semester**: Courses can be added or dropped via myPNW without academic penalty.\n- **Weeks 2 to 9 (Drop Period)**: Courses dropped receive a 'W' grade on the official transcript.\n- **After Week 9**: Course drops require formal extenuating circumstance approval from the College Dean and Dean of Students.\n\n### Student Account Holds\n- Holds placed by Bursar (unpaid balance), Registrar (missing documents), or Parking must be resolved directly with the issuing department. Chatbots and advisors cannot override system holds."
+    },
+    {
+      "id": "DOC-APPEAL-01",
+      "title": "Grade Appeals & Academic Standing Policy",
+      "category": "Academic Policy",
+      "campus": "Both",
+      "url": "https://www.pnw.edu/registration/grade-appeals-and-standing/",
+      "summary": "Procedures for formal grade appeals, academic probation criteria, and academic suspension reinstatement.",
+      "content": "PNW provides a structured appeal process for students who believe a final course grade was assigned arbitrarily or capriciously.\n\n### Grade Appeal Procedure\n1. **Step 1 (Informal Resolution)**: Discuss the grade directly with the course instructor within 30 calendar days of grade posting.\n2. **Step 2 (Formal Departmental Review)**: If unresolved, submit a written appeal statement to the Department Head offering evidence of arbitrary grading.\n3. **Step 3 (College Grade Appeals Committee)**: If step 2 fails, file a formal petition with the Dean of Students Office (SUL 313 Hammond / LSF 103 Westville).\n\n### Academic Standing & Probation\n- Cumulative GPA below 2.00 places undergraduate students on Academic Probation.\n- Graduate students must maintain a minimum 3.00 Cumulative GPA to remain in good standing."
+    }
+  ],
+  "department_contacts": [
+    {
+      "department": "Dean of Students Office (Hammond)",
+      "location": "Student Union & Library Building (SUL), Room 313",
+      "phone": "(219) 989-2367",
+      "email": "dos@pnw.edu",
+      "campus": "Hammond",
+      "hours": "Mon-Fri 8:00 AM - 5:00 PM CST"
+    },
+    {
+      "department": "Dean of Students Office (Westville)",
+      "location": "Library-Student Faculty Building (LSF), Room 103",
+      "phone": "(219) 785-5551",
+      "email": "dos@pnw.edu",
+      "campus": "Westville",
+      "hours": "Mon-Fri 8:00 AM - 4:30 PM CST"
+    },
+    {
+      "department": "Office of the Registrar",
+      "location": "Lawshe Hall (Hammond) Room 130 / LSF (Westville) Room 101",
+      "phone": "(219) 989-2342",
+      "email": "registrar@pnw.edu",
+      "campus": "Both",
+      "hours": "Mon-Fri 8:00 AM - 4:30 PM CST"
+    },
+    {
+      "department": "Bursar & Student Financial Services",
+      "location": "Lawshe Hall (Hammond) Room 130",
+      "phone": "(219) 989-2560",
+      "email": "bursar@pnw.edu",
+      "campus": "Both",
+      "hours": "Mon-Fri 8:00 AM - 4:30 PM CST"
+    },
+    {
+      "department": "Computer Science Graduate Advising",
+      "location": "Potter Hall / CIVS Building",
+      "phone": "(219) 989-2700",
+      "email": "csgrad@pnw.edu",
+      "campus": "Hammond",
+      "hours": "Mon-Fri 8:30 AM - 4:30 PM CST"
+    },
+    {
+      "department": "PNW University Police & Parking Services",
+      "location": "1301 173rd Street, Hammond / Schwarz Hall, Westville",
+      "phone": "(219) 989-2911 (Hammond) / (219) 785-5220 (Westville)",
+      "email": "police@pnw.edu",
+      "campus": "Both",
+      "hours": "24/7 Dispatch"
+    }
+  ]
+}

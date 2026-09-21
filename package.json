@@ -1,0 +1,24 @@
+{
+  "name": "pnw-knowledge-chatbot",
+  "version": "1.0.0",
+  "description": "Purdue University Northwest Knowledge Chatbot grounded in official university documentation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "cli": "node cli.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  },
+  "keywords": [
+    "pnw",
+    "purdue-northwest",
+    "chatbot",
+    "rag",
+    "grounded-ai"
+  ],
+  "author": "PNW Development Team",
+  "license": "ISC"
+}
