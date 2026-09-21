@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PNW Knowledge Chatbot API",
+    "description": "API contract for Purdue University Northwest Knowledge Chatbot",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/chat/stream": {
+      "post": {
+        "summary": "Stream grounded chatbot responses via SSE",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string" },
+                  "campus_id": { "type": "integer" },
+                  "session_id": { "type": "string" }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events stream of text tokens and citations",
+            "content": { "text/event-stream": {} }
+          }
+        }
+      }
+    },
+    "/api/schedule": {
+      "get": {
+        "summary": "Get academic schedule deadlines",
+        "parameters": [
+          { "name": "term", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List of term deadlines" }
+        }
+      }
+    },
+    "/api/prerequisites": {
+      "get": {
+        "summary": "Get course prerequisite tree",
+        "parameters": [
+          { "name": "course_code", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Prerequisite chain and graph node representation" }
+        }
+      }
+    }
+  }
+}
