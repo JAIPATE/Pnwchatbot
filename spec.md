@@ -7,6 +7,13 @@
 
 ---
 
+## Clarifications
+
+### Session 2026-10-26
+- Q: How should the chatbot verify or enforce that access is scoped to registered PNW students while personal myPNW database integration remains out of scope? (FR-007) → A: Open web portal with no login required; prompts and system responses are scoped strictly to PNW student topics without requiring student authentication credentials.
+
+---
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Direct Grounded Answers for University Policies & Campus Services (Priority: P1)
@@ -107,7 +114,7 @@ So that I can independently verify the rules and access official submission form
 - **FR-004**: System MUST include direct reference links to official PNW web pages/documents for every generated answer.
 - **FR-005**: System MUST provide clear guidance on academic procedures including Plan of Study (EPOS) workflows, registration PIN procedures, and grade appeal steps.
 - **FR-006**: System MUST filter out non-PNW (e.g., Purdue West Lafayette) policies to prevent cross-campus misinformation.
-- **FR-007**: System MUST scope operations to registered PNW undergraduate and graduate students.
+- **FR-007**: System MUST provide open web portal access without requiring student login or authentication, scoping prompts, corpus data, and system responses strictly to registered PNW undergraduate and graduate student topics.
 - **FR-008**: System MUST support query processing for common student topics: add/drop classes, academic standing, financial aid deadlines, parking, and registration errors.
 
 ### Key Entities
@@ -134,11 +141,13 @@ So that I can independently verify the rules and access official submission form
 
 ### In-Scope
 - Answering student questions on PNW policies, academic regulations, registration processes, plan of study workflows, and campus services.
+- Open web portal access with queries and answers scoped to registered PNW student topics.
 - Retrieval-augmented response generation using approved PNW document corpus.
 - Fail-safe fallback and departmental routing.
 - Source URL citation for all answers.
 
 ### Out-of-Scope
+- Student authentication credentials or SSO/Purdue Career Account login barriers.
 - Live integration with myPNW student database or private student academic records (grades, financial balance).
 - Processing transactions (e.g., automatically submitting a plan of study or registering for a class on behalf of a student).
-- Support for non-registered users or external public inquiries (prospective students, faculty internal workflows).
+- Support for external public marketing inquiries or faculty internal administrative workflows.
