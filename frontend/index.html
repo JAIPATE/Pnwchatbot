@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purdue University Northwest - Knowledge Chatbot & Student Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Navigation Header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="brand">
+                    <div class="brand-logo">PNW</div>
+                    <div class="brand-text">
+                        <h1>Purdue Northwest</h1>
+                        <span class="brand-subtitle">Knowledge Chatbot & Student Portal</span>
+                    </div>
+                </div>
+
+                <!-- Campus Selector Badge -->
+                <div class="campus-badge" id="campusSelectorBtn">
+                    <span class="campus-icon">📍</span>
+                    <span id="currentCampusLabel">Hammond Campus</span>
+                    <span class="chevron">▼</span>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <button class="nav-btn active" data-tab="chatTab">
+                    <span class="nav-icon">💬</span> AI Chat Assistant
+                </button>
+                <button class="nav-btn" data-tab="scheduleTab">
+                    <span class="nav-icon">📅</span> Academic Deadlines
+                </button>
+                <button class="nav-btn" data-tab="prereqTab">
+                    <span class="nav-icon">🌳</span> Course Prerequisites
+                </button>
+                <button class="nav-btn" data-tab="corpusTab">
+                    <span class="nav-icon">📚</span> Policy Documents
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- TAB 1: CHAT ASSISTANT -->
+            <section id="chatTab" class="tab-pane active">
+                <div class="chat-layout">
+                    <div class="chat-container glass-panel">
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Welcome Message -->
+                            <div class="message assistant-message">
+                                <div class="avatar">🤖</div>
+                                <div class="message-content">
+                                    <p>Hello! I am your <strong>Purdue Northwest Knowledge Assistant</strong>. Ask me anything about university policies, tuition refund deadlines, course prerequisites, parking tickets, or student handbooks!</p>
+                                    <div class="prompt-pills">
+                                        <button class="pill-btn" onclick="sendPrompt('How do I pay or appeal a parking ticket?')">🅿️ Parking Ticket Payment</button>
+                                        <button class="pill-btn" onclick="sendPrompt('What are the Fall 2026 tuition refund deadlines?')">📅 Fall 2026 Refund Dates</button>
+                                        <button class="pill-btn" onclick="sendPrompt('What are the prerequisites for CS 30200?')">💻 CS 30200 Prerequisites</button>
+                                        <button class="pill-btn" onclick="sendPrompt('Does PNW offer a Computer Science Ph.D. program?')">🎓 CS Ph.D. Availability</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input Box -->
+                        <div class="chat-input-area">
+                            <form id="chatForm" onsubmit="handleChatSubmit(event)">
+                                <input type="text" id="chatInput" placeholder="Ask a PNW policy, course, or deadline question..." autocomplete="off" required>
+                                <button type="submit" id="sendBtn" class="send-btn">
+                                    <span>Send</span>
+                                    <span class="send-icon">➔</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Citations & Info Panel -->
+                    <aside class="sidebar-panel glass-panel">
+                        <h3>ℹ️ Grounded Information</h3>
+                        <p class="sidebar-desc">Answers are verified against official PNW documentation. Factual statements include clickable citations below.</p>
+                        
+                        <div id="citationsContainer" class="citations-list">
+                            <div class="empty-citations">
+                                <span>📌</span>
+                                <p>No citations yet. Ask a question to see source references.</p>
+                            </div>
+                        </div>
+
+                        <div class="guardrail-box">
+                            <h4>🛡️ Fail-Safe Policy Guardrail</h4>
+                            <p>If the assistant lacks official grounded information, it will refuse to guess and direct you to the <strong>Dean of Students Office</strong>.</p>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- TAB 2: ACADEMIC DEADLINES -->
+            <section id="scheduleTab" class="tab-pane">
+                <div class="glass-panel content-card">
+                    <div class="card-header">
+                        <h2>📅 PNW Academic Schedule & Refund Deadlines</h2>
+                        <div class="filter-controls">
+                            <label for="termSelect">Filter Term:</label>
+                            <select id="termSelect" onchange="loadScheduleTable()">
+                                <option value="">All Terms</option>
+                                <option value="FALL_2026" selected>Fall 2026</option>
+                                <option value="SPRING_2026">Spring 2026</option>
+                                <option value="SUMMER_2026">Summer 2026</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table class="data-table" id="scheduleTable">
+                            <thead>
+                                <tr>
+                                    <th>Term</th>
+                                    <th>Event / Deadline</th>
+                                    <th>Deadline Date</th>
+                                    <th>Refund %</th>
+                                    <th>Policy Notes</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduleTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: COURSE PREREQUISITES -->
+            <section id="prereqTab" class="tab-pane">
+                <div class="glass-panel content-card">
+                    <div class="card-header">
+                        <h2>🌳 Computer Science Course Prerequisite Visualizer</h2>
+                        <div class="filter-controls">
+                            <label for="courseSelect">Select Course:</label>
+                            <select id="courseSelect" onchange="loadPrerequisites()">
+                                <option value="CS 30200" selected>CS 30200 - Data Structures</option>
+                                <option value="CS 18000">CS 18000 - Object-Oriented Prog</option>
+                                <option value="CS 24000">CS 24000 - Programming in C</option>
+                                <option value="CS 38100">CS 38100 - Analysis of Algorithms</option>
+                                <option value="CS 40800">CS 40800 - Software Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="prereq-view-grid">
+                        <div class="prereq-graph-box" id="graphCanvas">
+                            <!-- Visual Tree Rendered Here -->
+                        </div>
+
+                        <div class="prereq-details-box" id="prereqDetails">
+                            <h3>Prerequisite Summary</h3>
+                            <div id="prereqSummaryContent">Select a course above to view details.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: POLICY DOCUMENTS -->
+            <section id="corpusTab" class="tab-pane">
+                <div class="glass-panel content-card">
+                    <h2>📚 Official Ingested PNW Document Corpus</h2>
+                    <p class="card-desc">The chatbot's knowledge base is strictly grounded in these official Purdue Northwest documents:</p>
+                    
+                    <div class="doc-cards-grid" id="docCardsGrid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Campus Switcher Modal -->
+    <div class="modal-overlay" id="campusModal">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h2>📍 Select Your Primary Campus</h2>
+                <button class="close-btn" onclick="closeCampusModal()">✕</button>
+            </div>
+            <p>Purdue Northwest offers programs and services across two campuses. Choose your primary campus to tailor policy and course information:</p>
+            <div class="campus-options">
+                <div class="campus-card active" onclick="selectCampus(1, 'Hammond Campus')">
+                    <div class="campus-title">Hammond Campus</div>
+                    <div class="campus-desc">Main campus located in Hammond, IN. Home to College of Engineering & Science labs and main student center.</div>
+                </div>
+                <div class="campus-card" onclick="selectCampus(2, 'Westville Campus')">
+                    <div class="campus-title">Westville Campus</div>
+                    <div class="campus-desc">Branch campus located in Westville, IN. Features Technology and Health Science buildings.</div>
+                </div>
+            </div>
+            <button class="confirm-btn" onclick="closeCampusModal()">Confirm Selection</button>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
