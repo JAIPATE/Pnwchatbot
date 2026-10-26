@@ -1,77 +1,122 @@
-# Logical Data Design (data_design.md) - Entities & Relationships
+# Logical Data Model (data-model.md) - Entities & Relationships
 
-This document specifies the logical data entities, attributes, and relationships extracted from the User Stories, Acceptance Criteria (ACs), and PNW document corpus.
+This document specifies the logical data entities, attributes, relationships, validation rules, and state transitions extracted from the User Stories, Acceptance Criteria (ACs), and PNW document corpus.
 
 ---
 
 ## 🏢 Entities & Attributes
 
 ### 1. Campus
-- `id` (Surrogate Primary Key, Integer)
-- `code` (Unique campus code, e.g. "HAMMOND", "WESTVILLE")
-- `name` (Full campus name, e.g. "Purdue University Northwest - Hammond Campus")
-- `is_active` (Boolean)
+- `id`: Integer (Primary Key, Autoincrement)
+- `code`: String(30), Unique, Not Null (e.g., `"HAMMOND"`, `"WESTVILLE"`)
+- `name`: String(100), Not Null (e.g., `"Purdue University Northwest - Hammond Campus"`)
+- `is_active`: Boolean, Default `True`
 
 ### 2. Document
-- `id` (Surrogate Primary Key, Integer)
-- `title` (Document title, e.g. "PNW Student Handbook 2024-2025")
-- `category` (Category: "POLICY", "PARKING", "ACADEMIC_CATALOG", "SCHEDULE", "ACCESSIBILITY")
-- `source_url` (URL link to official PNW webpage or PDF document)
-- `file_type` (File type: "PDF", "HTML", "WORD")
-- `last_updated` (Date)
+- `id`: Integer (Primary Key, Autoincrement)
+- `title`: String(200), Not Null (e.g., `"PNW Student Handbook 2024-2025"`)
+- `category`: Enum/String(50), Not Null (`"POLICY"`, `"PARKING"`, `"ACADEMIC_CATALOG"`, `"SCHEDULE"`, `"ACCESSIBILITY"`)
+- `source_url`: String(500), Not Null (Official PNW webpage or PDF URL)
+- `file_type`: String(20), Not Null (`"PDF"`, `"HTML"`, `"WORD"`)
+- `last_updated`: Date/String, Not Null
 
 ### 3. DocumentChunk
-- `id` (Surrogate Primary Key, Integer)
-- `document_id` (Foreign Key -> Document.id)
-- `chunk_index` (Integer order index)
-- `section_title` (Section heading, e.g. "Academic Integrity & Misconduct")
-- `content` (Extracted raw text or markdown table content)
-- `campus_id` (Foreign Key -> Campus.id, Nullable if applies to all campuses)
+- `id`: Integer (Primary Key, Autoincrement)
+- `document_id`: Integer, Foreign Key -> `Document.id`, Not Null
+- `chunk_index`: Integer, Not Null (Zero-based ordering within document)
+- `section_title`: String(200), Not Null (e.g., `"Academic Integrity & Misconduct"`)
+- `content`: Text, Not Null (Extracted text or markdown table content)
+- `campus_id`: Integer, Foreign Key -> `Campus.id`, Nullable (Null if applicable to both campuses)
 
 ### 4. AcademicSchedule
-- `id` (Surrogate Primary Key, Integer)
-- `term` (Term name: "FALL_2026", "SPRING_2026", "SUMMER_2026")
-- `event_name` (Event name, e.g. "100% Tuition Refund Deadline", "Last Day to Drop")
-- `deadline_date` (Date)
-- `refund_percentage` (Integer check: 0 to 100)
-- `notes` (Additional term policy details)
+- `id`: Integer (Primary Key, Autoincrement)
+- `term`: String(50), Not Null (`"FALL_2026"`, `"SPRING_2026"`, `"SUMMER_2026"`)
+- `event_name`: String(200), Not Null (e.g., `"100% Tuition Refund Deadline"`)
+- `deadline_date`: Date, Not Null
+- `refund_percentage`: Integer, Check `(refund_percentage >= 0 AND refund_percentage <= 100)`
+- `notes`: Text, Nullable
 
 ### 5. CoursePrerequisite
-- `id` (Surrogate Primary Key, Integer)
-- `course_code` (Course code, e.g. "CS 30200")
-- `course_title` (Course title, e.g. "Data Structures & Algorithms")
-- `prerequisite_code` (Prerequisite course code, e.g. "CS 18000")
-- `minimum_grade` (Required grade, e.g. "C")
-- `campus_availability` (Text string: "HAMMOND_AND_WESTVILLE", "HAMMOND_ONLY", "WESTVILLE_ONLY")
+- `id`: Integer (Primary Key, Autoincrement)
+- `course_code`: String(20), Not Null (e.g., `"CS 30200"`)
+- `course_title`: String(150), Not Null (e.g., `"Data Structures & Algorithms"`)
+- `prerequisite_code`: String(20), Nullable (e.g., `"CS 18000"`)
+- `minimum_grade`: String(5), Default `"C"`
+- `campus_availability`: Enum/String(50), Not Null (`"HAMMOND_AND_WESTVILLE"`, `"HAMMOND_ONLY"`, `"WESTVILLE_ONLY"`)
 
 ### 6. ParkingRule
-- `id` (Surrogate Primary Key, Integer)
-- `campus_id` (Foreign Key -> Campus.id)
-- `topic` (Topic: "TICKET_PAYMENT", "APPEAL_PROCESS", "PERMIT_TYPES", "VISITOR_PARKING")
-- `rule_summary` (Concise step-by-step summary)
-- `official_portal_url` (Link to MyPNW / Student Accounts Payment Portal)
+- `id`: Integer (Primary Key, Autoincrement)
+- `campus_id`: Integer, Foreign Key -> `Campus.id`, Not Null
+- `topic`: Enum/String(50), Not Null (`"TICKET_PAYMENT"`, `"APPEAL_PROCESS"`, `"PERMIT_TYPES"`, `"VISITOR_PARKING"`)
+- `rule_summary`: Text, Not Null
+- `official_portal_url`: String(500), Not Null
 
 ### 7. UserConversation
-- `id` (Surrogate Primary Key, Integer)
-- `session_id` (Unique UUID string)
-- `campus_id` (Foreign Key -> Campus.id)
-- `created_at` (Timestamp)
+- `id`: Integer (Primary Key, Autoincrement)
+- `session_id`: String(64), Unique, Not Null
+- `campus_id`: Integer, Foreign Key -> `Campus.id`, Nullable
+- `created_at`: Timestamp, Default Current Timestamp
 
 ### 8. ChatMessage
-- `id` (Surrogate Primary Key, Integer)
-- `conversation_id` (Foreign Key -> UserConversation.id)
-- `sender` (Sender: "USER", "ASSISTANT")
-- `message_text` (Text content of the message)
-- `is_grounded` (Boolean)
-- `citations_json` (JSON list of source document links and titles)
-- `created_at` (Timestamp)
+- `id`: Integer (Primary Key, Autoincrement)
+- `conversation_id`: Integer, Foreign Key -> `UserConversation.id`, Not Null
+- `sender`: Enum/String(20), Not Null (`"USER"`, `"ASSISTANT"`)
+- `message_text`: Text, Not Null
+- `is_grounded`: Boolean, Default `True`
+- `citations_json`: Text / JSON, Nullable
+- `created_at`: Timestamp, Default Current Timestamp
 
 ---
 
 ## 🔗 Relationships
 
-- **One Campus can have many Document Chunks** (`Campus 1 -- * DocumentChunk`).
-- **One Campus can have many Parking Rules** (`Campus 1 -- * ParkingRule`).
-- **One Document can have many Document Chunks** (`Document 1 -- * DocumentChunk`).
-- **One User Conversation can have many Chat Messages** (`UserConversation 1 -- * ChatMessage`).
-- **One Course can have many Prerequisites** (`CoursePrerequisite` self-referential or mapping table).
+- **Campus to DocumentChunk**: 1 to Many (`Campus 1 -- * DocumentChunk`, optional FK)
+- **Campus to ParkingRule**: 1 to Many (`Campus 1 -- * ParkingRule`)
+- **Document to DocumentChunk**: 1 to Many (`Document 1 -- * DocumentChunk`, cascade delete)
+- **UserConversation to ChatMessage**: 1 to Many (`UserConversation 1 -- * ChatMessage`, ordered by `created_at`)
+- **Campus to UserConversation**: 1 to Many (`Campus 1 -- * UserConversation`)
+
+---
+
+## 🛡️ Validation Rules
+
+1. **Non-Empty Chat Query**: Incoming `query` string must not be empty or whitespace-only; triggers HTTP 400 if blank.
+2. **Refund Percentage Boundary**: `refund_percentage` must be an integer between 0 and 100 inclusive (`CHECK (refund_percentage BETWEEN 0 AND 100)`).
+3. **Groundedness Threshold**: If computed similarity score $S < 0.45$:
+   - `is_grounded` is set to `False`
+   - `response_text` must default to official fail-safe departmental contact refusal
+   - Hallucinated or external ungrounded text generation is strictly disallowed
+4. **Campus Code Uniqueness**: `Campus.code` must be unique and uppercase (`CHECK (code IN ('HAMMOND', 'WESTVILLE'))`).
+5. **Course Code Format**: Course codes must adhere to standard department + number convention (e.g., `CS 30200`, `MA 16300`).
+
+---
+
+## 🔄 State Transitions
+
+### Chat Query Lifecycle
+
+```text
+[User Input Received]
+         │
+         ▼
+[Validate Query Payload] ──(Empty String)──> [HTTP 400 Bad Request]
+         │ (Valid)
+         ▼
+[Retrieve Corpus Chunks & Calculate Score S]
+         │
+    ┌────┴────────────────────────┐
+    │ S >= 0.45                   │ S < 0.45
+    ▼                             ▼
+[Grounded Response State]     [Fail-Safe Fallback State]
+- is_grounded = True          - is_grounded = False
+- Synthesize answer text      - Provide Dean of Students / Advising contacts
+- Extract matching citations  - Empty or general policy citations
+    │                             │
+    └────┬────────────────────────┘
+         │
+         ▼
+[Format JSON / Stream SSE Tokens]
+         │
+         ▼
+[Completed & Client Rendered]
+```

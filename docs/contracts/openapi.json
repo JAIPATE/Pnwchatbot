@@ -6,6 +6,36 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/chat": {
+      "post": {
+        "summary": "Synchronous grounded chatbot response",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Grounded answer with citations and fail-safe metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query payload"
+          }
+        }
+      }
+    },
     "/api/chat/stream": {
       "post": {
         "summary": "Stream grounded chatbot responses via SSE",
@@ -14,13 +44,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "query": { "type": "string" },
-                  "campus_id": { "type": "integer" },
-                  "session_id": { "type": "string" }
-                },
-                "required": ["query"]
+                "$ref": "#/components/schemas/ChatRequest"
               }
             }
           }
@@ -28,7 +52,12 @@
         "responses": {
           "200": {
             "description": "Server-Sent Events stream of text tokens and citations",
-            "content": { "text/event-stream": {} }
+            "content": {
+              "text/event-stream": {}
+            }
+          },
+          "400": {
+            "description": "Invalid query payload"
           }
         }
       }
@@ -37,10 +66,30 @@
       "get": {
         "summary": "Get academic schedule deadlines",
         "parameters": [
-          { "name": "term", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Term filter (e.g. FALL_2026, SPRING_2026)"
+          }
         ],
         "responses": {
-          "200": { "description": "List of term deadlines" }
+          "200": {
+            "description": "List of term deadlines",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduleItem"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -48,10 +97,132 @@
       "get": {
         "summary": "Get course prerequisite tree",
         "parameters": [
-          { "name": "course_code", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "course_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Target course code (e.g. CS 30200)"
+          }
         ],
         "responses": {
-          "200": { "description": "Prerequisite chain and graph node representation" }
+          "200": {
+            "description": "Prerequisite chain and graph node representation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrereqResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campus": {
+      "get": {
+        "summary": "Get list of active campuses",
+        "responses": {
+          "200": {
+            "description": "List of active university campuses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampusItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ChatRequest": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": {
+            "type": "string",
+            "example": "How do I pay parking citations at Hammond?"
+          },
+          "campus_id": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1
+          },
+          "session_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "sess_12345"
+          }
+        }
+      },
+      "Citation": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "source_url": { "type": "string" },
+          "section": { "type": "string" }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "required": ["response_text", "is_grounded", "citations", "session_id"],
+        "properties": {
+          "response_text": { "type": "string" },
+          "is_grounded": { "type": "boolean" },
+          "citations": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Citation" }
+          },
+          "session_id": { "type": "string" }
+        }
+      },
+      "ScheduleItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "term": { "type": "string" },
+          "event_name": { "type": "string" },
+          "deadline_date": { "type": "string", "format": "date" },
+          "refund_percentage": { "type": "integer" },
+          "notes": { "type": "string" }
+        }
+      },
+      "PrereqNode": {
+        "type": "object",
+        "properties": {
+          "course_code": { "type": "string" },
+          "title": { "type": "string" },
+          "prerequisite": { "type": "string" },
+          "min_grade": { "type": "string" },
+          "campus_availability": { "type": "string" }
+        }
+      },
+      "PrereqResponse": {
+        "type": "object",
+        "properties": {
+          "course": { "type": "string" },
+          "prerequisites": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PrereqNode" }
+          }
+        }
+      },
+      "CampusItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "code": { "type": "string" },
+          "name": { "type": "string" },
+          "is_active": { "type": "boolean" }
         }
       }
     }
