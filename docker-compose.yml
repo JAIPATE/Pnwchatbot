@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  pgvector:
+    image: pgvector/pgvector:pg16
+    container_name: pnw_pgvector_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pnw_knowledge_db
+      POSTGRES_USER: pnw_admin
+      POSTGRES_PASSWORD: pnw_secret_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+      - ./db/pgvector_schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pnw_admin -d pnw_knowledge_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgvector_data:

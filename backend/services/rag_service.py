@@ -61,6 +61,37 @@ def search_corpus(query: str, campus_id: int = 1) -> Tuple[List[Dict], float]:
     results = [chunk for _, chunk in scored_chunks[:3]]
     return results, max_score
 
+def search_vector_corpus(query: str, campus_id: int = 1, top_k: int = 3) -> Tuple[List[Dict], float]:
+    """Retrieves document chunks using dense vector embeddings (pgvector / vector store)."""
+    from backend.rag.embedder import get_embedder
+    from backend.rag.vector_store import VectorStoreFactory
+
+    campus_map = {1: "Hammond", 2: "Westville"}
+    campus_filter = campus_map.get(campus_id, "All")
+
+    store = VectorStoreFactory.create(allow_sqlite_fallback=True)
+    embedder = get_embedder()
+    query_vec = embedder.embed_query(query)
+    results = store.search(query_vec, top_k=top_k, campus_filter=campus_filter)
+
+    if not results:
+        return [], 0.0
+
+    chunks = [
+        {
+            "chunk_id": r.chunk_id,
+            "section_title": r.section_title,
+            "content": r.content,
+            "document_title": r.document_title,
+            "source_url": r.source_url,
+            "campus": r.campus,
+            "score": r.score,
+        }
+        for r in results
+    ]
+    max_score = results[0].score if results else 0.0
+    return chunks, max_score
+
 def get_or_create_conversation(session_id: str, campus_id: int) -> int:
     convs = execute_query("SELECT id FROM conversations WHERE session_id = ?", (session_id,))
     if convs:
